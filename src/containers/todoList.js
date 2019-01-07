@@ -4,26 +4,43 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import { withStyles } from '@material-ui/core/styles';
 
 import TodoListItem from '../components/todoListItem';
+import AddTodoDialog from '../components/addTodoDialog';
+import * as customTheme from '../theme';
+
+const styles = {
+    addTodoButton: {
+        padding: '24px 45px'
+    },
+    accentText: {
+        color: customTheme.accentColor
+    }
+}
 
 class TodoList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            todoItemData: []
+            todoItemData: [],
+            openDialog: false,
+            error: false,
+            todoDescription: '',
+            selectedCategory: this.props.currentCategory
         }
     }
 
-    handleTaskCompletion = value => () => {
-        let todoItemData = this.state.todoItemData;
-        todoItemData.find((object, i) => {
-            if (object.id === value.id) {
-                todoItemData[i].checked = !value.checked;
-            }
-            return 0;
-        })
-        this.setState({ todoItemData: todoItemData });
+    handleDialogOpen = () => {
+        this.setState({ openDialog: true });
+    };
+    
+    handleDialogClose = () => {
+        this.setState({ openDialog: false });
+    };
+
+    handleFieldChange = (name, event) => {
+        this.setState({[name]: event.target.value});
     }
 
     todoList = () => {
@@ -31,28 +48,45 @@ class TodoList extends React.Component {
             return (
                 <TodoListItem
                     key={index}
+                    value={index}
                     todoTitle={todo.title}
                     completed={todo.completed}
-                    onCheck={this.handleTaskCompletion}
+                    handleTaskCompletion={this.props.handleTaskCompletion}
+                    deleteTodo={this.props.deleteTodo}
                 />
             )
         })
     }
 
+    addTodo = () => {
+        this.props.addTodo(this.state.todoDescription, this.state.selectedCategory);
+        this.handleDialogClose();
+    }
+
     render() {
+        const { classes } = this.props;
         return (
             <List>
                 {this.todoList()}
                 <ListItem button
                     onClick={!this.props.disableAddButton ? this.handleDialogOpen : null}
                     disabled={this.props.disableAddButton}
+                    classes={{'root': classes.addTodoButton}}
                 >
-                    <ListItemIcon><AddIcon /></ListItemIcon>
-                    <ListItemText primary="New To-Do" />
+                    <ListItemIcon><AddIcon nativeColor={customTheme.accentColor} /></ListItemIcon>
+                    <ListItemText classes={{'primary': classes.accentText}} primary="New To-Do" />
                 </ListItem>
+                <AddTodoDialog
+                    open={this.state.openDialog}
+                    selectedCategory={this.state.selectedCategory}
+                    textFieldValue={this.state.todoDescription}
+                    handleFieldChange={this.handleFieldChange}
+                    categoryList={this.props.categoryList}
+                    handleClose={this.handleDialogClose}
+                    addTodo={this.addTodo} />
             </List>
         )
     }
 }
 
-export default TodoList;
+export default withStyles(styles)(TodoList);

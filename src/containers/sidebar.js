@@ -40,6 +40,16 @@ class Sidebar extends React.Component {
         }
     }
 
+    computeTaskCount = (todoItems) => {
+        let count = 0;
+        todoItems.map((todo) => {
+            if(!todo.completed) {
+                count++;
+            }
+        });
+        return count;
+    }
+
     categoriesList = () => {
         return <List>
             {Object.keys(this.props.categoriesData).map((categoryName) => {
@@ -48,7 +58,7 @@ class Sidebar extends React.Component {
                         <SidebarCategory
                             categoryIcon={this.props.categoriesData[categoryName].icon}
                             categoryName={categoryName}
-                            taskCount={this.props.categoriesData[categoryName].todoItems.length}
+                            taskCount={this.computeTaskCount(this.props.categoriesData[categoryName].todoItems)}
                             handleCategorySelection={this.props.handleCategorySelection}
                         />
                         <Divider />

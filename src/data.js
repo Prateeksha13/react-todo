@@ -7,8 +7,7 @@ export default {
     'My Day': {
         todoItems: [
             {
-                id: 0,
-                title: 'Drop Email to clients',
+                title: 'Drop e-mail to clients',
                 completed: false,
             }
         ],
@@ -18,7 +17,6 @@ export default {
     'Important': {
         todoItems: [
             {
-                id: 0,
                 title: 'Buy medicines',
                 completed: false,
             }
@@ -28,7 +26,6 @@ export default {
     'Personal': {
         todoItems: [
             {
-                id: 0,
                 title: 'Make lunch',
                 completed: false,
             }

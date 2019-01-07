@@ -12,12 +12,15 @@ import { withStyles } from '@material-ui/core/styles';
 import Sidebar from './sidebar';
 import TodoList from './todoList';
 import data from '../data';
+import * as customTheme from '../theme';
 
 const drawerWidth = 300;
 
 const styles = theme => ({
     root: {
         display: 'flex',
+        height: '100vh',
+        background: theme.canvasColor
     },
     appBar: {
         marginLeft: drawerWidth,
@@ -31,10 +34,22 @@ const styles = theme => ({
         display: 'none',
         },
     },
-    toolbar: theme.mixins.toolbar,
+    toolbar: {height: 250},
     content: {
-        flexGrow: 1
+        flexGrow: 1,
+        backgroundColor: customTheme.canvasColor
     },
+    toolBarRoot: {
+        background: 'url("/appbar-bg.jpeg")',
+        height: 250,
+        alignItems: 'flex-end',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+    },
+    appBarText: {
+        paddingBottom: 7,
+        fontSize: 40
+    }
 });
 
 class Layout extends React.Component {
@@ -55,7 +70,7 @@ class Layout extends React.Component {
         this.setState({selectedCategory: categoryName});
     }
 
-    addCategory = newCategory => {
+    addNewCategory = newCategory => {
         let todoItemsData = cloneDeep(this.state.todoItemsData);
         todoItemsData[newCategory] = {
             todoItems: [],
@@ -64,13 +79,39 @@ class Layout extends React.Component {
         this.setState({todoItemsData: todoItemsData});
     }
 
+    addNewToDo = (todoTitle, todoCategory) => {
+        let todoItemsData = cloneDeep(this.state.todoItemsData);
+        todoItemsData[todoCategory].todoItems.push(
+            {
+                title: todoTitle,
+                completed: false,
+            }
+        )
+        this.setState({
+            todoItemsData: todoItemsData,
+            selectedCategory: todoCategory
+        });
+    }
+
+    handleTaskCompletion = value => () => {
+        let todoItemsData = cloneDeep(this.state.todoItemsData);
+        todoItemsData[this.state.selectedCategory].todoItems[value].completed = !todoItemsData[this.state.selectedCategory].todoItems[value].completed;
+        this.setState({ todoItemsData: todoItemsData });
+    }
+
+    deleteTodo = value => {
+        let todoItemsData = cloneDeep(this.state.todoItemsData);
+        todoItemsData[this.state.selectedCategory].todoItems.splice(value, 1);
+        this.setState({ todoItemsData: todoItemsData });
+    }
+
     render() {
         const { classes } = this.props;
         return (
         <div className={classes.root}>
             <CssBaseline />
             <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar>
+                <Toolbar classes={{'root': classes.toolBarRoot}}>
                     <IconButton
                         color="inherit"
                         aria-label="Open drawer"
@@ -79,7 +120,7 @@ class Layout extends React.Component {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" color="inherit" noWrap>
+                    <Typography variant="h6" color="inherit" noWrap className={classes.appBarText}>
                         {this.state.selectedCategory}
                     </Typography>
                 </Toolbar>
@@ -89,11 +130,19 @@ class Layout extends React.Component {
                 handleDrawerToggle={this.handleDrawerToggle}
                 categoriesData={this.state.todoItemsData}
                 handleCategorySelection={this.handleCategorySelection}
-                addCategory={this.addCategory}
-                disableAddButton={Object.keys(this.state.todoItemsData).length >= 8 ? true : false} />
+                addCategory={this.addNewCategory}
+                disableAddButton={Object.keys(this.state.todoItemsData).length >= 8 ? true : false}
+            />
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <TodoList todoItems={this.state.todoItemsData[this.state.selectedCategory].todoItems} />
+                <TodoList
+                    todoItems={this.state.todoItemsData[this.state.selectedCategory].todoItems}
+                    addTodo={this.addNewToDo}
+                    categoryList={Object.keys(this.state.todoItemsData)}
+                    currentCategory={this.state.selectedCategory}
+                    handleTaskCompletion={this.handleTaskCompletion}
+                    deleteTodo={this.deleteTodo}
+                />
             </main>
         </div>
         );

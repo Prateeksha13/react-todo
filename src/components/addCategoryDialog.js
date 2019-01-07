@@ -7,11 +7,11 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-const AddCategoryDialog = ({open, handleClose, addCategory, textFieldValue, handleCategoryFieldChange, error}) => {
+const AddCategoryDialog = (props) => {
     return (
         <Dialog
-            open={open}
-            onClose={handleClose}
+            open={props.open}
+            onClose={props.handleClose}
             aria-labelledby="form-dialog-title"
         >
             <DialogTitle id="form-dialog-title">Add Category</DialogTitle>
@@ -25,18 +25,18 @@ const AddCategoryDialog = ({open, handleClose, addCategory, textFieldValue, hand
                     label="Category Name"
                     type="text"
                     fullWidth
-                    error={error}
-                    helperText={error ? 'Please enter a valid category name' : ''}
-                    value={textFieldValue}
-                    onChange={handleCategoryFieldChange}
-                    onKeyDown={(e) => {return (e.keyCode === 13 ? addCategory() : null)}}
+                    error={props.error}
+                    helperText={props.error ? 'Please enter a valid category name' : ''}
+                    value={props.textFieldValue}
+                    onChange={props.handleCategoryFieldChange}
+                    onKeyDown={(e) => {return (e.keyCode === 13 ? props.addCategory() : null)}}
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={props.handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={addCategory} color="primary">
+                <Button onClick={props.addCategory} color="primary">
                     Add
                 </Button>
             </DialogActions>
