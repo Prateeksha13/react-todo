@@ -1,14 +1,17 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
+import cloneDeep from 'lodash/cloneDeep';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import CategoryIcon from '@material-ui/icons/ViewList';
 import { withStyles } from '@material-ui/core/styles';
 
 import Sidebar from './sidebar';
 import TodoList from './todoList';
+import data from '../data';
 
 const drawerWidth = 300;
 
@@ -39,7 +42,8 @@ class Layout extends React.Component {
         super(props);
         this.state = {
             mobileOpen: false,
-            todoItemsData: {}
+            todoItemsData: data,
+            selectedCategory: 'My Day'
         }
     }
 
@@ -47,9 +51,21 @@ class Layout extends React.Component {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
     };
 
+    handleCategorySelection = categoryName => {
+        this.setState({selectedCategory: categoryName});
+    }
+
+    addCategory = newCategory => {
+        let todoItemsData = cloneDeep(this.state.todoItemsData);
+        todoItemsData[newCategory] = {
+            todoItems: [],
+            icon: <CategoryIcon />
+        }
+        this.setState({todoItemsData: todoItemsData});
+    }
+
     render() {
         const { classes } = this.props;
-
         return (
         <div className={classes.root}>
             <CssBaseline />
@@ -64,14 +80,20 @@ class Layout extends React.Component {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" color="inherit" noWrap>
-                        Responsive drawer
+                        {this.state.selectedCategory}
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <Sidebar mobileOpen={this.state.mobileOpen} handleDrawerToggle={this.handleDrawerToggle} />
+            <Sidebar
+                mobileOpen={this.state.mobileOpen}
+                handleDrawerToggle={this.handleDrawerToggle}
+                categoriesData={this.state.todoItemsData}
+                handleCategorySelection={this.handleCategorySelection}
+                addCategory={this.addCategory}
+                disableAddButton={Object.keys(this.state.todoItemsData).length >= 8 ? true : false} />
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <TodoList />
+                <TodoList todoItems={this.state.todoItemsData[this.state.selectedCategory].todoItems} />
             </main>
         </div>
         );

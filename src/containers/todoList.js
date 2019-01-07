@@ -1,5 +1,9 @@
 import React from 'react';
+import AddIcon from '@material-ui/icons/Add';
 import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 
 import TodoListItem from '../components/todoListItem';
 
@@ -22,10 +26,30 @@ class TodoList extends React.Component {
         this.setState({ todoItemData: todoItemData });
     }
 
+    todoList = () => {
+        return this.props.todoItems.map((todo, index) => {
+            return (
+                <TodoListItem
+                    key={index}
+                    todoTitle={todo.title}
+                    completed={todo.completed}
+                    onCheck={this.handleTaskCompletion}
+                />
+            )
+        })
+    }
+
     render() {
         return (
             <List>
-                <TodoListItem onCheck={this.handleTaskCompletion} />
+                {this.todoList()}
+                <ListItem button
+                    onClick={!this.props.disableAddButton ? this.handleDialogOpen : null}
+                    disabled={this.props.disableAddButton}
+                >
+                    <ListItemIcon><AddIcon /></ListItemIcon>
+                    <ListItemText primary="New To-Do" />
+                </ListItem>
             </List>
         )
     }

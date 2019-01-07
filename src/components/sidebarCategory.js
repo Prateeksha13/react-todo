@@ -4,9 +4,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
-const SidebarCategory = ({categoryIcon, categoryName, taskCount}) => {
+const SidebarCategory = ({categoryIcon, categoryName, taskCount, handleCategorySelection}) => {
     return (
-        <ListItem button>
+        <ListItem button onClick={() => handleCategorySelection(categoryName)}>
             <ListItemIcon>{categoryIcon}</ListItemIcon>
             <ListItemText primary={categoryName} />
             <ListItemSecondaryAction>{taskCount}</ListItemSecondaryAction>
