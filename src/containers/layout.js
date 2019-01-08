@@ -82,7 +82,10 @@ class Layout extends React.Component {
             todoItems: [],
             icon: <CategoryIcon nativeColor={deepPurple[400]} />
         }
-        this.setState({todoItemsData: todoItemsData, selectedCategory: newCategory});
+        this.setState({
+            todoItemsData: todoItemsData,
+            selectedCategory: newCategory
+        });
     }
 
     addNewToDo = (todoTitle, todoCategory) => {

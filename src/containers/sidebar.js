@@ -102,13 +102,17 @@ class Sidebar extends React.Component {
     };
     
     handleDialogClose = () => {
-        this.setState({ openDialog: false, newCategoryName: '' });
+        this.setState({
+            openDialog: false,
+            newCategoryName: '',
+            error: false
+        });
     };
 
     addCategory = () => {
         if(this.state.newCategoryName.trim() && (Object.keys(this.props.categoriesData).indexOf(this.state.newCategoryName)) === -1) {
             this.props.addCategory(this.state.newCategoryName)
-            this.setState({newCategoryName: ''});
+            this.setState({newCategoryName: '', error: false});
             this.handleDialogClose();
         }
         else {

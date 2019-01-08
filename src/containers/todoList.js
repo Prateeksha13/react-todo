@@ -23,7 +23,6 @@ class TodoList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            todoItemData: [],
             openDialog: false,
             error: false,
             todoDescription: '',
@@ -42,7 +41,11 @@ class TodoList extends React.Component {
     };
     
     handleDialogClose = () => {
-        this.setState({ openDialog: false, todoDescription: '' });
+        this.setState({
+            openDialog: false,
+            todoDescription: '',
+            error: false
+        });
     };
 
     handleFieldChange = (name, event) => {
@@ -68,7 +71,7 @@ class TodoList extends React.Component {
     addTodo = () => {
         if(this.state.todoDescription.trim()) {
             this.props.addTodo(this.state.todoDescription, this.state.selectedCategory);
-            this.setState({todoDescription: ''});
+            this.setState({todoDescription: '', error: false});
             this.handleDialogClose();
         }
         else {
