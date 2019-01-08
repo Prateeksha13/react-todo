@@ -32,7 +32,7 @@ class TodoList extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props.currentCategory != nextProps.currentCategory) {
+        if(this.props.currentCategory !== nextProps.currentCategory) {
             this.setState({selectedCategory: nextProps.currentCategory});
         }
     }
@@ -42,7 +42,7 @@ class TodoList extends React.Component {
     };
     
     handleDialogClose = () => {
-        this.setState({ openDialog: false });
+        this.setState({ openDialog: false, todoDescription: '' });
     };
 
     handleFieldChange = (name, event) => {
@@ -68,6 +68,7 @@ class TodoList extends React.Component {
     addTodo = () => {
         if(this.state.todoDescription.trim()) {
             this.props.addTodo(this.state.todoDescription, this.state.selectedCategory);
+            this.setState({todoDescription: ''});
             this.handleDialogClose();
         }
         else {

@@ -102,11 +102,11 @@ class Sidebar extends React.Component {
     };
     
     handleDialogClose = () => {
-        this.setState({ openDialog: false });
+        this.setState({ openDialog: false, newCategoryName: '' });
     };
 
     addCategory = () => {
-        if(this.state.newCategoryName.trim()) {
+        if(this.state.newCategoryName.trim() && (Object.keys(this.props.categoriesData).indexOf(this.state.newCategoryName)) === -1) {
             this.props.addCategory(this.state.newCategoryName)
             this.setState({newCategoryName: ''});
             this.handleDialogClose();
@@ -116,7 +116,7 @@ class Sidebar extends React.Component {
         }
     }
 
-    handleCategoryFieldChange = event => {
+    handleCategoryFieldChange = (event) => {
         this.setState({newCategoryName: event.target.value});
     }
 

@@ -51,7 +51,7 @@ const AddCategoryDialog = (props) => {
                     InputProps={{classes: {'underline': classes.underline}}}
                     InputLabelProps={{classes: {'shrink': classes.secondary}}}
                     error={props.error}
-                    helperText={props.error ? 'Please enter a valid category name' : ''}
+                    helperText={props.error ? 'This is not a valid category name or the category already exists' : ''}
                     value={props.textFieldValue}
                     onChange={props.handleCategoryFieldChange}
                     onKeyDown={(e) => {return (e.keyCode === 13 ? props.addCategory() : null)}}
