@@ -14,6 +14,7 @@ import Sidebar from './sidebar';
 import TodoList from './todoList';
 import data from '../data';
 import * as customTheme from '../theme';
+import getPrettyDate from '../utils/dateTransform';
 
 const drawerWidth = 300;
 
@@ -51,6 +52,9 @@ const styles = theme => ({
     appBarText: {
         padding: '0 24px 15px',
         fontSize: 40
+    },
+    dateDisplay: {
+        fontSize: customTheme.regularFont
     }
 });
 
@@ -124,6 +128,7 @@ class Layout extends React.Component {
                     </IconButton>
                     <Typography variant="h6" color="inherit" noWrap className={classes.appBarText}>
                         {this.state.selectedCategory}
+                        <div className={classes.dateDisplay}>{getPrettyDate()}</div>
                     </Typography>
                 </Toolbar>
             </AppBar>

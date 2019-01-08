@@ -14,3 +14,4 @@ export const highlightColor = '#efefef';
 export const borderColor = '#eee';
 
 export const smallFont = 14;
+export const regularFont = 20;
