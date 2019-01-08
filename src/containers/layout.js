@@ -8,6 +8,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import CategoryIcon from '@material-ui/icons/ViewList';
 import { withStyles } from '@material-ui/core/styles';
+import { deepPurple } from '@material-ui/core/colors';
 
 import Sidebar from './sidebar';
 import TodoList from './todoList';
@@ -27,6 +28,7 @@ const styles = theme => ({
         [theme.breakpoints.up('sm')]: {
             width: `calc(100% - ${drawerWidth}px)`,
         },
+        boxShadow: '0 2px 5px rgba(0, 0, 0, 0.14)'
     },
     menuButton: {
         marginRight: 20,
@@ -47,7 +49,7 @@ const styles = theme => ({
         backgroundPosition: 'center'
     },
     appBarText: {
-        paddingBottom: 7,
+        padding: '0 24px 15px',
         fontSize: 40
     }
 });
@@ -74,7 +76,7 @@ class Layout extends React.Component {
         let todoItemsData = cloneDeep(this.state.todoItemsData);
         todoItemsData[newCategory] = {
             todoItems: [],
-            icon: <CategoryIcon />
+            icon: <CategoryIcon nativeColor={deepPurple[400]} />
         }
         this.setState({todoItemsData: todoItemsData});
     }
@@ -126,6 +128,7 @@ class Layout extends React.Component {
                 </Toolbar>
             </AppBar>
             <Sidebar
+                selectedCategory={this.state.selectedCategory}
                 mobileOpen={this.state.mobileOpen}
                 handleDrawerToggle={this.handleDrawerToggle}
                 categoriesData={this.state.todoItemsData}

@@ -6,8 +6,30 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import { withStyles } from '@material-ui/core/styles';
+
+import * as customTheme from '../theme';
+
+const styles = {
+    primary: {
+        color: `${customTheme.accentColor} !important`
+    },
+    secondary: {
+        color: `${customTheme.secondaryTextColor} !important`
+    },
+    wrapper: {
+        marginTop: 20,
+        width: '100%'
+    },
+    underline: {
+        '&:after': {
+            borderColor: customTheme.accentColor
+        }
+    }
+}
 
 const AddCategoryDialog = (props) => {
+    const { classes } = props;
     return (
         <Dialog
             open={props.open}
@@ -17,7 +39,7 @@ const AddCategoryDialog = (props) => {
             <DialogTitle id="form-dialog-title">Add Category</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Have a task in mind that fits no category? Create one now.
+                    Have a task in mind that fits no category? Help me organize more!
                 </DialogContentText>
                 <TextField
                     autoFocus
@@ -25,6 +47,9 @@ const AddCategoryDialog = (props) => {
                     label="Category Name"
                     type="text"
                     fullWidth
+                    className={classes.wrapper}
+                    InputProps={{classes: {'underline': classes.underline}}}
+                    InputLabelProps={{classes: {'shrink': classes.secondary}}}
                     error={props.error}
                     helperText={props.error ? 'Please enter a valid category name' : ''}
                     value={props.textFieldValue}
@@ -33,10 +58,10 @@ const AddCategoryDialog = (props) => {
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={props.handleClose} color="primary">
+                <Button onClick={props.handleClose}>
                     Cancel
                 </Button>
-                <Button onClick={props.addCategory} color="primary">
+                <Button onClick={props.addCategory} classes={{'label': classes.primary}}>
                     Add
                 </Button>
             </DialogActions>
@@ -44,4 +69,4 @@ const AddCategoryDialog = (props) => {
     )
 }
 
-export default AddCategoryDialog;
+export default withStyles(styles)(AddCategoryDialog);

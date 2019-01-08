@@ -1,5 +1,6 @@
 import React from 'react';
 import AddIcon from '@material-ui/icons/Add';
+import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
@@ -7,10 +8,12 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import { withStyles } from '@material-ui/core/styles';
 
 import AddCategoryDialog from '../components/addCategoryDialog';
 import SidebarCategory from '../components/sidebarCategory';
+import * as customTheme from '../theme';
 
 const drawerWidth = 300;
 
@@ -27,6 +30,30 @@ const styles = theme => ({
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
         width: drawerWidth,
+    },
+    accentText: {
+        color: customTheme.accentColor
+    },
+    addTodoButton: {
+        padding: '10px 20px'
+    },
+    divider: {
+        backgroundColor: customTheme.borderColor
+    },
+    userRoot: {
+        padding: '15px 20px'
+    },
+    nameRoot: {
+        marginTop: 10
+    },
+    listRoot: {
+        paddingTop: 0
+    },
+    appName: {
+        padding: '10px 25px',
+        color: customTheme.secondaryTextColor,
+        letterSpacing: 0.4,
+        fontSize: customTheme.smallFont
     }
 });
 
@@ -51,7 +78,8 @@ class Sidebar extends React.Component {
     }
 
     categoriesList = () => {
-        return <List>
+        const { classes } = this.props;
+        return <List classes={{'root': classes.listRoot}}>
             {Object.keys(this.props.categoriesData).map((categoryName) => {
                 return (
                     <div key={categoryName}>
@@ -60,8 +88,9 @@ class Sidebar extends React.Component {
                             categoryName={categoryName}
                             taskCount={this.computeTaskCount(this.props.categoriesData[categoryName].todoItems)}
                             handleCategorySelection={this.props.handleCategorySelection}
+                            selected={this.props.selectedCategory === categoryName ? true : false}
                         />
-                        <Divider />
+                        <Divider classes={{'root': classes.divider}} />
                     </div>
                 )
             })}
@@ -91,6 +120,34 @@ class Sidebar extends React.Component {
         this.setState({newCategoryName: event.target.value});
     }
 
+    drawerHtml = () => {
+        const { classes } = this.props;
+        return (
+            <div>
+                <div className={classes.appName}>MY TODO APP</div>
+                <ListItem classes={{'root': classes.userRoot}}>
+                    <ListItemAvatar>
+                    <Avatar alt="PT" src="/my-avatar.png" />
+                    </ListItemAvatar>
+                    <ListItemText
+                        classes={{'root': classes.nameRoot}}
+                        primary="Prateeksha"
+                    />
+                </ListItem>
+                <Divider classes={{'root': classes.divider}} />
+                {this.categoriesList()}
+                <ListItem button
+                    onClick={!this.props.disableAddButton ? this.handleDialogOpen : null}
+                    disabled={this.props.disableAddButton}
+                    classes={{'root': classes.addTodoButton}}
+                >
+                    <ListItemIcon><AddIcon nativeColor={customTheme.accentColor} /></ListItemIcon>
+                    <ListItemText classes={{'primary': classes.accentText}} primary="New Category" />
+                </ListItem>
+            </div>
+        )
+    }
+
     render() {
         const { classes, theme } = this.props;
         return (
@@ -106,12 +163,7 @@ class Sidebar extends React.Component {
                             paper: classes.drawerPaper,
                         }}
                     >
-                        <div className={classes.toolbar} />
-                        {this.categoriesList()}
-                        <ListItem button onClick={this.props.addCategory}>
-                            <ListItemIcon><AddIcon /></ListItemIcon>
-                            <ListItemText primary="New List" />
-                        </ListItem>
+                       {this.drawerHtml()}
                     </Drawer>
                 </Hidden>
                 <Hidden xsDown implementation="css">
@@ -122,15 +174,7 @@ class Sidebar extends React.Component {
                         variant="permanent"
                         open
                     >
-                        <div className={classes.toolbar} />
-                        {this.categoriesList()}
-                        <ListItem button
-                            onClick={!this.props.disableAddButton ? this.handleDialogOpen : null}
-                            disabled={this.props.disableAddButton}
-                        >
-                            <ListItemIcon><AddIcon /></ListItemIcon>
-                            <ListItemText primary="New Category" />
-                        </ListItem>
+                        {this.drawerHtml()}
                     </Drawer>
                 </Hidden>
                 <AddCategoryDialog

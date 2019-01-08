@@ -32,7 +32,9 @@ const TodoListItem = (props) => {
                 icon={<CheckCircleOutline nativeColor={customTheme.lightTextColor} />}
                 onChange={props.handleTaskCompletion(props.value)}
             />
-            <ListItemText primary={props.completed ? <strike>{props.todoTitle}</strike> : props.todoTitle} />
+            <ListItemText
+                primary={props.completed ? <strike>{props.todoTitle}</strike> : props.todoTitle}
+                secondary={props.currentCategory} />
             <ListItemSecondaryAction>
                 <CloseIcon onClick={props.deleteTodo} className={classes.closeIcon} nativeColor={customTheme.lightTextColor} />
             </ListItemSecondaryAction>

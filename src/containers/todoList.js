@@ -31,6 +31,12 @@ class TodoList extends React.Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if(this.props.currentCategory != nextProps.currentCategory) {
+            this.setState({selectedCategory: nextProps.currentCategory});
+        }
+    }
+
     handleDialogOpen = () => {
         this.setState({ openDialog: true });
     };
@@ -53,14 +59,20 @@ class TodoList extends React.Component {
                     completed={todo.completed}
                     handleTaskCompletion={this.props.handleTaskCompletion}
                     deleteTodo={this.props.deleteTodo}
+                    currentCategory={this.props.currentCategory}
                 />
             )
         })
     }
 
     addTodo = () => {
-        this.props.addTodo(this.state.todoDescription, this.state.selectedCategory);
-        this.handleDialogClose();
+        if(this.state.todoDescription.trim()) {
+            this.props.addTodo(this.state.todoDescription, this.state.selectedCategory);
+            this.handleDialogClose();
+        }
+        else {
+            this.setState({error: true});
+        }
     }
 
     render() {
@@ -83,7 +95,8 @@ class TodoList extends React.Component {
                     handleFieldChange={this.handleFieldChange}
                     categoryList={this.props.categoryList}
                     handleClose={this.handleDialogClose}
-                    addTodo={this.addTodo} />
+                    addTodo={this.addTodo}
+                    error={this.state.error} />
             </List>
         )
     }
